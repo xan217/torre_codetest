@@ -13,13 +13,13 @@ var companies = [];
 
 /*
 EndPoint List:
-- /companies/:offset 
+- GET /companies/:offset 
       Params: 
          - offset: number => offset from the start of the list
       Description: 
          Retrieve the X*30 list of companies
 
-- /opportunitiesByCompany
+- POST /opportunitiesByCompany
       Params:
          - company: string => Name of the company, not the ID. From the aggregators I don't receive the ID
          - size: number => Size of the page
@@ -28,7 +28,7 @@ EndPoint List:
       Description:
          Retrieves the list of the opportunities by a given company. All the opportunities are processed to retrieve basic information.
 
-- /opportunities
+- POST /opportunities
       Params:
          - size: number => Size of the page
          - offset: number => Offset from the start of the list (from the main server)
@@ -36,7 +36,7 @@ EndPoint List:
       Description:
          Retrieves a list of opportunities without filter. All the opportunities are processed to retrieve basic information.
 
-- /opportunity/:id
+- GET /opportunity/:id
       Params:
          - id: number => id of the opportunity
       Description:
@@ -58,7 +58,7 @@ app.listen( PORT, () => {
             // From this point it suppose to retrieve the companies data by finding a opportunity and getting the 
             // data of the company from there because there is no given endpoint for that, but the server doesn't allow it.
             // Just retrieving the Name of the company instead.
-            
+
             // companiesAux = companiesAux.slice(0, 50);
             // companiesAux.forEach(element => {
             //    retrieveOpportunities( element.value, 1 )
@@ -79,30 +79,45 @@ app.listen( PORT, () => {
 });
 
 app.get('/companies/:offset', (request, response) => {
-   const filteredCompanies = companies.slice(request.params.offset, request.params.offset + 30);
+   const filteredCompanies = companies.slice(request.params.offset*10, request.params.offset*10 + 10);
    response.send(filteredCompanies);
 });
 
 app.post('/opportunitiesByCompany', async (request, response) => {
-   let opportunities = await retrieveOpportunities( request.body['company'], request.body['size'], request.body['offset'], request.body['page'] );
-   response.send( opportunities );
+   try{
+      let opportunities = await retrieveOpportunities( request.body['company'], request.body['size'], request.body['offset'], request.body['page'] );
+      response.send( opportunities );
+   }
+   catch( error ){
+      response.send( error );
+   }
 });
 
 app.post( '/opportunities', async (request, response) => {
-   let opportunities = await retrieveOpportunities( null, request.body['size'], request.body['offset'], request.body['page'] );
-   response.send( opportunities );
+   try{
+      let opportunities = await retrieveOpportunities( null, request.body['size'], request.body['offset'], request.body['page'] );
+      response.send( opportunities );
+   }
+   catch( error ){
+      response.send( error );
+   }
 });
 
 app.get( '/opportunity/:id', async (request, response) => {
-   let opportunity = await axios.get( `https://torre.co/api/opportunities/${request.params.id}`,{},
-            {
-               headers: {
-                  'Content-Type': 'application/json'
+   try{
+      let opportunity = await axios.get( `https://torre.co/api/opportunities/${request.params.id}`,{},
+               {
+                  headers: {
+                     'Content-Type': 'application/json'
+                  }
                }
-            }
-         );
+            );
 
-   response.send(opportunity.data);
+      response.send(opportunity.data);
+   }
+   catch( error ){
+      response.send( error );
+   }
 });
 
 const retrieveOpportunities = async function ( companyName = null, size = 20, offset = 0, page = 1 ){
