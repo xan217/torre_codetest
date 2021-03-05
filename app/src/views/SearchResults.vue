@@ -1,5 +1,5 @@
 <template>
-    <div>busqueda</div>
+    <div>Resultados de búsqueda no implementados</div>
 </template>
 
 <script>

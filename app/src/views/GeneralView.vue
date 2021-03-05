@@ -30,9 +30,9 @@ export default {
     name: 'GeneralView',
     data: () => ({
       items: [
-        { text: 'Buscar',   icon: 'magnify',          to: '/search',         image: 'https://image.freepik.com/free-photo/top-view-business-man-hands-working-laptop-tablet-pc-wooden-desk_1423-278.jpg'},
-        { text: 'Empresas', icon: 'office-building',  to: '/companies',      image: 'https://image.freepik.com/free-photo/group-people-working-out-business-plan-office_1303-15870.jpg'},
-        { text: 'Empleos',  icon: 'briefcase',        to: '/opportunities',  image: 'https://image.freepik.com/free-photo/group-people-working-out-business-plan-office_1303-15768.jpg'}
+        { text: 'Buscar',   icon: 'magnify',          to: '/',                image: 'https://image.freepik.com/free-photo/top-view-business-man-hands-working-laptop-tablet-pc-wooden-desk_1423-278.jpg'},
+        { text: 'Empresas', icon: 'office-building',  to: '/companies',       image: 'https://image.freepik.com/free-photo/group-people-working-out-business-plan-office_1303-15870.jpg'},
+        { text: 'Empleos',  icon: 'briefcase',        to: '/opportunities',   image: 'https://image.freepik.com/free-photo/group-people-working-out-business-plan-office_1303-15768.jpg'}
       ]
     }),
 }

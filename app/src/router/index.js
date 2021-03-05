@@ -17,6 +17,7 @@ const routes = [
   },
   {
     path: '/opportunities',
+    props: true,
     name: 'opportunities',
     component: () => import('../views/OpportunitiesListing.vue')
   },
@@ -26,7 +27,8 @@ const routes = [
     component: () => import('../views/SearchResults.vue')
   },
   {
-    path: '/opportunity/:id',
+    path: '/opportunity',
+    props: true,
     name: 'opportunity',
     component: () => import('../views/Opportunity.vue')
   }

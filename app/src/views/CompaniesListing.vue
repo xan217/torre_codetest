@@ -1,60 +1,79 @@
 <template>
-  <v-content class="viewContainer">
+  <div class="viewContainer">
     <div class="title">
       <h3>Empresas</h3>
       <span class="subtitle">
         <span class="highlight">companies</span>.torre.co
       </span>
     </div>
-    <v-grid>
-      <v-row class="listContainer">
-        <v-col cols="8">
-          <v-skeleton-loader color="grey darken-2" type="list-item-three-line" dark></v-skeleton-loader>
-        </v-col>
-      </v-row>
-      <v-row class="listContainer">
-        <v-col cols="8">
-          <v-row class="cardContainer" v-for="i in 3" :key="i">
-            <div class="cardContainerOpener">
-          <!-- <router-link :to="item.to" class="cardContainerOpener"> -->
-            <div class="cardImage">
-              <div class="imageContainer">
-                <img src="https://res.cloudinary.com/torre-technologies-co/image/upload/v1600929540/origin/bio/organizations/Modern_Tribe_2C_Inc__ibbgsc.jpg" alt="" class="imageContained">
+    <div>
+      <v-row class="listContainer" >
+        <v-col cols="8" v-if="companies != []">
+          <v-row class="cardContainer" v-for="(company, index) in companies" :key="index">
+            <!-- <div class="cardContainerOpener"> -->
+            <router-link :to="{ name: 'opportunities', params: {companyName: company.value} }" class="cardContainerOpener">
+              <div class="cardImage">
+                <div class="imageContainer">
+                  <img src="https://torre.co/favicon.png" alt="" class="imageContained">
+                </div>
               </div>
-            </div>
-            <div class="cardInfo">
-              <div class="textContainer"><b>Empresa 1</b></div>
-              <div class="textContainer">Brief de la empresa</div>
-              <div class="pills">
-                <v-chip color="grey darken-1" class="ma-1">Algo</v-chip>
-                <v-chip color="grey darken-1" class="ma-1">Algo</v-chip>
-                <v-chip color="grey darken-1" class="ma-1">Algo</v-chip>
+              <div class="cardInfo">
+                <div class="textContainer"><b>{{ company.value }}</b></div>
+                <!-- 
+                No data extra from the company. Just the name.
+                <div class="textContainer">Brief de la empresa</div>
+                <div class="pills">
+                  <v-chip color="grey darken-1" class="ma-1">Algo</v-chip>
+                  <v-chip color="grey darken-1" class="ma-1">Algo</v-chip>
+                  <v-chip color="grey darken-1" class="ma-1">Algo</v-chip>
+                </div> -->
               </div>
-            </div>
-            <div class="cardNext">
-              <span class="iconContainer">
-                <v-icon>mdi-chevron-right</v-icon>
-              </span>
-            </div>
-            </div>
-          <!-- </router-link> -->
+              <div class="cardNext">
+                <span class="iconContainer">
+                  <v-icon>mdi-chevron-right</v-icon>
+                </span>
+              </div>
+            <!-- </div> -->
+            </router-link>
           </v-row>
+          <v-skeleton-loader class="mb-1" color="grey darken-2" type="list-item-three-line" dark></v-skeleton-loader>
+          <v-card v-intersect="infiniteScrolling"></v-card>
         </v-col>
-        <v-col cols="3" offset-md="1">
-          <v-card>
-            <v-card-title>
-              Otras cosas
-            </v-card-title>
-          </v-card>
+        <v-col cols="3" offset-md="0" class="sidePanel">
+          Container que debería tener alguna funcionalidad y aún no la defino.
         </v-col>
       </v-row>
-    </v-grid>
-  </v-content>
+    </div>
+  </div>
 </template>
 
 <script>
+import Vue from 'vue';
+
 export default {
-    name: 'CompaniesListing',
+  name: 'CompaniesListing',
+  data: () => ({
+    companies: [],
+    page: 0,
+  }),
+  async created(){
+    this.retrieveData();
+  },
+  methods: {
+    async retrieveData(){
+      this.companies = await Vue.fetchData('GET', `/companies/${++this.page}`);
+    },
+    infiniteScrolling() {
+      setTimeout(() => {
+        this.page++;
+        Vue.fetchData('GET', `/companies/${++this.page}`).then( newResults => {
+          if( newResults.length > 0 ){
+            newResults.forEach( element => this.companies.push( element ));
+          }
+        });
+      }, 300);
+    }
+  }
 }
 </script>
 
@@ -128,6 +147,12 @@ export default {
   transform: translateY(1px);
   margin: 0 4px 0 0;
   color: whitesmoke !important;
+}
+.sidePanel{
+  background-color: #27292d;
+  margin: 0 35px !important;  
+  color: whitesmoke;
+  height: 500px;
 }
 </style>
 

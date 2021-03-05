@@ -7,7 +7,7 @@
       <v-spacer></v-spacer>
 
       <div class="">
-        <v-btn class="btnHeader" flat v-for="(item, i) in items" :key="i" :to="item.to" color="transparent">
+        <v-btn class="btnHeader" v-for="(item, i) in items" :key="i" :to="item.to" color="transparent">
           <v-row class="center">
             <v-icon class="posCenter fs-18" dark>mdi-{{ item.icon }}</v-icon>
           </v-row>
@@ -21,7 +21,7 @@
     <v-main >
       <v-navigation-drawer v-model="drawer" temporary absolute color="gray accent-4" dark>
         <v-list nav dense >
-          <v-list-item-group v-model="group" active-class="gray--text text--accent-4" >
+          <v-list-item-group active-class="gray--text text--accent-4" >
             <v-list-item v-for="(item, i) in items" :key="i" link :to="item.to" >
               <v-list-item-icon dark>
                 <v-icon>mdi-{{ item.icon }}</v-icon>
@@ -49,7 +49,7 @@ export default {
     drawer: false,
     items: [
       { text: 'Inicio',   icon: 'home',             to: '/' },
-      { text: 'Buscar',   icon: 'magnify',          to: '/search' },
+      //{ text: 'Buscar',   icon: 'magnify',          to: '/search' },
       { text: 'Empresas', icon: 'office-building',  to: '/companies' },
       { text: 'Empleos',  icon: 'briefcase',        to: '/opportunities' }
     ]
